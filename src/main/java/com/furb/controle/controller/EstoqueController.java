@@ -1,9 +1,10 @@
 package com.furb.controle.controller;
 
+import com.furb.controle.dao.DAOCategoria;
 import com.furb.controle.dao.DAOMarca;
+import com.furb.controle.model.CategoriaDAO;
 import com.furb.controle.model.MarcaDAO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,9 @@ public class EstoqueController {
     @Autowired
     private DAOMarca marcaRepository;
 
+    @Autowired
+    private DAOCategoria categoriaRepository;
+
     // MARCA
 
     @RequestMapping(value = "/getAllMarcas", method = RequestMethod.GET)
@@ -25,7 +29,6 @@ public class EstoqueController {
     @RequestMapping(value = "/getMarcaById", method = RequestMethod.GET)
     public Optional<MarcaDAO> getMarcaById(@RequestParam("id") int id) {
         //TODO: Verificar se tem que tratar
-        System.out.println(id);
         return marcaRepository.findById(id);
     }
 
@@ -56,8 +59,44 @@ public class EstoqueController {
         );
     }
 
-
     // PRODUTO
+
+    @RequestMapping(value = "/getAllCategorias", method = RequestMethod.GET)
+    public List<CategoriaDAO> getAllCategorias() {
+        return (List<CategoriaDAO>) categoriaRepository.findAll();
+    }
+
+    @RequestMapping(value = "/getCategoriaById", method = RequestMethod.GET)
+    public Optional<CategoriaDAO> getCategoriaById(@RequestParam("id") int id) {
+        //TODO: Verificar se tem que tratar
+        return categoriaRepository.findById(id);
+    }
+
+    @RequestMapping(value = "/checkCategoria", method = RequestMethod.GET)
+    public String categoriaExiste(@RequestParam("id") int id) {
+        if (categoriaRepository.existsById(id)) {
+            return "Uma categoria existente possui este ID";
+        }
+        return "Nenhuma categoria utiliza este ID no momento";
+    }
+
+    @RequestMapping(value = "/addCategoria", method = RequestMethod.POST)
+    public String addCategoria(@RequestBody CategoriaDAO categoria) {
+        categoriaRepository.save(categoria);
+        return "Categoria salva!";
+    }
+
+    @RequestMapping(value = "/updateCategoria", method = RequestMethod.PUT)
+    public Optional<CategoriaDAO> updateMarca(@RequestBody CategoriaDAO newCategoria, @RequestParam("id") int id) {
+        return categoriaRepository.findById(id).map(
+                categoria -> {
+                    categoria.setNome(newCategoria.getNome());
+                    categoria.setDescricao(newCategoria.getDescricao());
+                    return categoriaRepository.save(categoria);
+                    // TODO: Caso o id n exista o valor retornado é null e n faz nada
+                }
+        );
+    }
 
     // TESTE
 
