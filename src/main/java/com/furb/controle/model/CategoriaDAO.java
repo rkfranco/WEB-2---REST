@@ -1,6 +1,7 @@
 package com.furb.controle.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "categoria")
@@ -8,7 +9,10 @@ public class CategoriaDAO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int CATEGORIA_ID;
+    public int CATEGORIA_ID;
+
+    @OneToMany(mappedBy = "categoria")
+    private Set<ProdutoDAO> produto;
 
     @Column
     private String nome;

@@ -2,8 +2,10 @@ package com.furb.controle.controller;
 
 import com.furb.controle.dao.DAOCategoria;
 import com.furb.controle.dao.DAOMarca;
+import com.furb.controle.dao.DAOProduto;
 import com.furb.controle.model.CategoriaDAO;
 import com.furb.controle.model.MarcaDAO;
+import com.furb.controle.model.ProdutoDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +20,9 @@ public class EstoqueController {
 
     @Autowired
     private DAOCategoria categoriaRepository;
+
+    @Autowired
+    private DAOProduto produtoRepository;
 
     // MARCA
 
@@ -61,6 +66,48 @@ public class EstoqueController {
 
     // PRODUTO
 
+    @RequestMapping(value = "/getAllProdutos", method = RequestMethod.GET)
+    public List<ProdutoDAO> getAllProdutos() {
+        return (List<ProdutoDAO>) produtoRepository.findAll();
+    }
+
+    @RequestMapping(value = "/getProdutoById", method = RequestMethod.GET)
+    public Optional<ProdutoDAO> getProdutoById(@RequestParam("id") int id) {
+        //TODO: Verificar se tem que tratar
+        return produtoRepository.findById(id);
+    }
+
+    @RequestMapping(value = "/checkProduto", method = RequestMethod.GET)
+    public String produtoExiste(@RequestParam("id") int id) {
+        if (produtoRepository.existsById(id)) {
+            return "Um produto existente possui este ID";
+        }
+        return "Nenhum produto utiliza este ID no momento";
+    }
+
+    @RequestMapping(value = "/addProduto", method = RequestMethod.POST)
+    public String addProduto(@RequestBody ProdutoDAO produto) {
+        produto.setCategoria();
+        produtoRepository.save(produto);
+        return "Produto salvo!";
+    }
+
+    @RequestMapping(value = "/updateProduto", method = RequestMethod.PUT)
+    public Optional<ProdutoDAO> updateProduto(@RequestBody ProdutoDAO newProduto, @RequestParam("id") int id) {
+        return produtoRepository.findById(id).map(
+                produto -> {
+                    produto.setNome(newProduto.getNome());
+                    produto.setDescricao(newProduto.getDescricao());
+                    produto.setPreco(newProduto.getPreco());
+                    produto.setMarca(newProduto.getMarca());
+                    produto.setQtdEstoque(newProduto.getQtdEstoque());
+                    // TODO: Caso o id n exista o valor retornado é null e n faz nada
+                    return produtoRepository.save(produto);
+                }
+        );
+    }
+
+    // CATEGORIA
     @RequestMapping(value = "/getAllCategorias", method = RequestMethod.GET)
     public List<CategoriaDAO> getAllCategorias() {
         return (List<CategoriaDAO>) categoriaRepository.findAll();
@@ -87,7 +134,7 @@ public class EstoqueController {
     }
 
     @RequestMapping(value = "/updateCategoria", method = RequestMethod.PUT)
-    public Optional<CategoriaDAO> updateMarca(@RequestBody CategoriaDAO newCategoria, @RequestParam("id") int id) {
+    public Optional<CategoriaDAO> updateCategoria(@RequestBody CategoriaDAO newCategoria, @RequestParam("id") int id) {
         return categoriaRepository.findById(id).map(
                 categoria -> {
                     categoria.setNome(newCategoria.getNome());

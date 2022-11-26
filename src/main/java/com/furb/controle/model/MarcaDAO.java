@@ -1,6 +1,7 @@
 package com.furb.controle.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "marca")
@@ -8,7 +9,10 @@ public class MarcaDAO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int MARCA_ID;
+    public int MARCA_ID;
+
+    @OneToMany(mappedBy = "marca")
+    private Set<ProdutoDAO> produto;
 
     @Column
     private String razaoSocial;
@@ -18,6 +22,14 @@ public class MarcaDAO {
 
     @Column
     private String cnpj;
+
+    public Set<ProdutoDAO> getProduto() {
+        return produto;
+    }
+
+    public void setProduto(Set<ProdutoDAO> produto) {
+        this.produto = produto;
+    }
 
     public int getMARCA_ID() {
         return MARCA_ID;
