@@ -11,7 +11,7 @@ public class CategoriaDAO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int CATEGORIA_ID;
+    public Integer categoriaId;
 
     @JsonIgnore
     @OneToMany(mappedBy = "categoria")
@@ -23,12 +23,12 @@ public class CategoriaDAO {
     @Column
     private String descricao;
 
-    public int getCATEGORIA_ID() {
-        return CATEGORIA_ID;
+    public Integer getCATEGORIA_ID() {
+        return categoriaId;
     }
 
-    public void setCATEGORIA_ID(int CATEGORIA_ID) {
-        this.CATEGORIA_ID = CATEGORIA_ID;
+    public void setCATEGORIA_ID(int categoriaId) {
+        this.categoriaId = categoriaId;
     }
 
     public String getNome() {

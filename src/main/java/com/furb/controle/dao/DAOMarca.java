@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DAOMarca  extends CrudRepository<MarcaDAO, Integer> {
     //MarcaDAO findByCNPJ(String cnpj);
+
+    //MarcaDAO findByNome(String nome);
 }

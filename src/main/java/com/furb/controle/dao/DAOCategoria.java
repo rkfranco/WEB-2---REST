@@ -8,5 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DAOCategoria extends CrudRepository<CategoriaDAO, Integer> {
 
-//    MarcaDAO findByNome(String cnpj);
+//    CategoriaDAO findByNome(String cnpj);
+
+//    CategoriaDAO findByMarca(Integer id);
 }

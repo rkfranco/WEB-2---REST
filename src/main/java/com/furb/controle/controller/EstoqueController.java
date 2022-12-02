@@ -66,6 +66,12 @@ public class EstoqueController {
         );
     }
 
+    @RequestMapping(value = "/deleteMarca", method = RequestMethod.DELETE)
+    public String deleteMarca(@RequestParam("id") Integer id){
+        marcaRepository.deleteById(id);
+        return "Marca deletada com sucesso!";
+    }
+
     // PRODUTO
 
     @RequestMapping(value = "/getAllProdutos", method = RequestMethod.GET)
@@ -90,6 +96,7 @@ public class EstoqueController {
     @RequestMapping(value = "/addProduto", method = RequestMethod.POST)
     public String addProduto(@RequestBody ProdutoDTO newProduto) {
         ProdutoDAO produto = new ProdutoDAO();
+        produto.setId(newProduto.getId());
         produto.setNome(newProduto.getNome());
         produto.setDescricao(newProduto.getDescricao());
         produto.setPreco(newProduto.getPreco());
@@ -106,8 +113,8 @@ public class EstoqueController {
         return "Produto salvo!";
     }
 
-    @RequestMapping(value = "/updateProduto", method = RequestMethod.PUT)
-    public Optional<ProdutoDAO> updateProduto(@RequestBody ProdutoDTO newProduto, @RequestParam("id") int id) {
+    @RequestMapping(value = "/updateProdutoById", method = RequestMethod.PUT)
+    public Optional<ProdutoDAO> updateProdutoById(@RequestBody ProdutoDTO newProduto, @RequestParam("id") int id) {
         return produtoRepository.findById(id).map(
                 produto -> {
                     produto.setNome(newProduto.getNome());
@@ -125,6 +132,12 @@ public class EstoqueController {
                     return produtoRepository.save(produto);
                 }
         );
+    }
+
+    @RequestMapping(value = "/deleteProdutoById", method = RequestMethod.DELETE)
+    public String deleteProdutoById(@RequestParam("id") Integer id){
+        produtoRepository.deleteById(id);
+        return "Produto deletado com sucesso!";
     }
 
     // CATEGORIA
@@ -154,7 +167,7 @@ public class EstoqueController {
     }
 
     @RequestMapping(value = "/updateCategoria", method = RequestMethod.PUT)
-    public Optional<CategoriaDAO> updateCategoria(@RequestBody CategoriaDAO newCategoria, @RequestParam("id") int id) {
+    public Optional<CategoriaDAO> updateCategoria(@RequestBody CategoriaDAO newCategoria, @RequestParam("id") Integer id) {
         return categoriaRepository.findById(id).map(
                 categoria -> {
                     categoria.setNome(newCategoria.getNome());
@@ -163,6 +176,12 @@ public class EstoqueController {
                     // TODO: Caso o id n exista o valor retornado é null e n faz nada
                 }
         );
+    }
+
+    @RequestMapping(value = "/deleteCategoria", method = RequestMethod.DELETE)
+    public String deleteCategoria(@RequestParam("id") Integer id){
+        categoriaRepository.deleteById(id);
+        return "Categoria deletada com sucesso!";
     }
 
     // TESTE

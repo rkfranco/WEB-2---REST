@@ -11,7 +11,7 @@ public class MarcaDAO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int MARCA_ID;
+    public int marcaId;
 
     @JsonIgnore
     @OneToMany(mappedBy = "marca")
@@ -35,11 +35,11 @@ public class MarcaDAO {
     }
 
     public int getMARCA_ID() {
-        return MARCA_ID;
+        return marcaId;
     }
 
     public void setMARCA_ID(int MARCA_ID) {
-        this.MARCA_ID = MARCA_ID;
+        this.marcaId = MARCA_ID;
     }
 
     public String getRazaoSocial() {
