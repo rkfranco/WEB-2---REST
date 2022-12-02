@@ -6,7 +6,9 @@ import com.furb.controle.dao.DAOProduto;
 import com.furb.controle.model.CategoriaDAO;
 import com.furb.controle.model.MarcaDAO;
 import com.furb.controle.model.ProdutoDAO;
+import com.furb.controle.model.ProdutoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -86,22 +88,40 @@ public class EstoqueController {
     }
 
     @RequestMapping(value = "/addProduto", method = RequestMethod.POST)
-    public String addProduto(@RequestBody ProdutoDAO produto) {
-        produto.setCategoria();
+    public String addProduto(@RequestBody ProdutoDTO newProduto) {
+        ProdutoDAO produto = new ProdutoDAO();
+        produto.setNome(newProduto.getNome());
+        produto.setDescricao(newProduto.getDescricao());
+        produto.setPreco(newProduto.getPreco());
+        Optional<MarcaDAO> marca = marcaRepository.findById(newProduto.getMarcaId());
+        Optional<CategoriaDAO> categoria = categoriaRepository.findById(newProduto.getCategoriaId());
+        if (marca.isEmpty() || categoria.isEmpty()){
+            throw new IllegalArgumentException();
+            //TODO: implementar erro para a marca
+        }
+        produto.setMarca(marca.get());
+        produto.setCategoria(categoria.get());
+        produto.setQtdEstoque(newProduto.getQtdEstoque());
         produtoRepository.save(produto);
         return "Produto salvo!";
     }
 
     @RequestMapping(value = "/updateProduto", method = RequestMethod.PUT)
-    public Optional<ProdutoDAO> updateProduto(@RequestBody ProdutoDAO newProduto, @RequestParam("id") int id) {
+    public Optional<ProdutoDAO> updateProduto(@RequestBody ProdutoDTO newProduto, @RequestParam("id") int id) {
         return produtoRepository.findById(id).map(
                 produto -> {
                     produto.setNome(newProduto.getNome());
                     produto.setDescricao(newProduto.getDescricao());
                     produto.setPreco(newProduto.getPreco());
-                    produto.setMarca(newProduto.getMarca());
+                    Optional<MarcaDAO> marca = marcaRepository.findById(newProduto.getMarcaId());
+                    Optional<CategoriaDAO> categoria = categoriaRepository.findById(newProduto.getCategoriaId());
+                    if (marca.isEmpty() || categoria.isEmpty()){
+                        throw new IllegalArgumentException();
+                        //TODO: implementar erro para a marca
+                    }
+                    produto.setMarca(marca.get());
+                    produto.setCategoria(categoria.get());
                     produto.setQtdEstoque(newProduto.getQtdEstoque());
-                    // TODO: Caso o id n exista o valor retornado é null e n faz nada
                     return produtoRepository.save(produto);
                 }
         );

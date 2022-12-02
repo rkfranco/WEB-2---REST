@@ -1,5 +1,7 @@
 package com.furb.controle.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -11,6 +13,7 @@ public class MarcaDAO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int MARCA_ID;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "marca")
     private Set<ProdutoDAO> produto;
 

@@ -1,5 +1,7 @@
 package com.furb.controle.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,26 +10,28 @@ public class ProdutoDAO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @ManyToOne
+    //@JsonIgnore
     @JoinColumn(name = "produto_marca_id", nullable = false)
     private MarcaDAO marca;
 
     @ManyToOne
+    //@JsonIgnore
     @JoinColumn(name = "produto_categoria_id", nullable = false)
     private CategoriaDAO categoria;
     @Column
     private String nome;
 
     @Column
-    private double preco;
+    private Double preco;
 
     @Column
     private String descricao;
 
     @Column
-    private int qtdEstoque;
+    private Integer qtdEstoque;
 
     public CategoriaDAO getCategoria() {
         return categoria;

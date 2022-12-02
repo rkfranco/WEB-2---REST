@@ -1,23 +1,42 @@
 package com.furb.controle.model;
 
 public class ProdutoDTO {
-    private int id;
+    private Integer id;
 
+    private Integer marcaId;
+
+    private Integer categoriaId;
     private String nome;
     // TODO: IMPLEMENTAR PARA USAR NO CONTROLLER
 
-    private double preco;
+    private Double preco;
 
     private String descricao;
 
-    private int qtdEstoque;
+    private Integer qtdEstoque;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getMarcaId() {
+        return marcaId;
+    }
+
+    public void setMarcaId(Integer marcaId) {
+        this.marcaId = marcaId;
+    }
+
+    public Integer getCategoriaId() {
+        return categoriaId;
+    }
+
+    public void setCategoriaId(Integer categoriaId) {
+        this.categoriaId = categoriaId;
     }
 
     public String getNome() {
@@ -28,11 +47,11 @@ public class ProdutoDTO {
         this.nome = nome;
     }
 
-    public double getPreco() {
+    public Double getPreco() {
         return preco;
     }
 
-    public void setPreco(double preco) {
+    public void setPreco(Double preco) {
         this.preco = preco;
     }
 
@@ -44,11 +63,11 @@ public class ProdutoDTO {
         this.descricao = descricao;
     }
 
-    public int getQtdEstoque() {
+    public Integer getQtdEstoque() {
         return qtdEstoque;
     }
 
-    public void setQtdEstoque(int qtdEstoque) {
+    public void setQtdEstoque(Integer qtdEstoque) {
         this.qtdEstoque = qtdEstoque;
     }
 }
