@@ -34,11 +34,19 @@ public class EstoqueController {
     }
 
     @RequestMapping(value = "/getMarcaById", method = RequestMethod.GET)
-    public Optional<MarcaDAO> getMarcaById(@RequestParam("id") int id) {
+    public Optional<MarcaDAO> getMarcaById(@RequestParam("id") Integer id) {
         //TODO: Verificar se tem que tratar
         return marcaRepository.findById(id);
     }
 
+    @RequestMapping(value = "/getMarcaByCNPJ", method = RequestMethod.GET)
+    public Optional<MarcaDAO> getMarcaByCNPJ(@RequestParam("cnpj") String cnpj) {
+        return marcaRepository.findBycnpj(cnpj);
+    }
+    @RequestMapping(value = "/getMarcaByNome", method = RequestMethod.GET)
+    public Optional<MarcaDAO> getMarcaByNome(@RequestParam("nome") String nome) {
+        return marcaRepository.findBynome(nome);
+    }
     @RequestMapping(value = "/checkMarca", method = RequestMethod.GET)
     public String marcaExiste(@RequestParam("id") int id) {
         if (marcaRepository.existsById(id)) {
@@ -85,6 +93,25 @@ public class EstoqueController {
         return produtoRepository.findById(id);
     }
 
+    @RequestMapping(value = "/getProdutoByNome", method = RequestMethod.GET)
+    public Optional<ProdutoDAO> getProdutoByNome(@RequestParam("nome") String nome) {
+        //TODO: Verificar se tem que tratar
+        return produtoRepository.findBynome(nome);
+    }
+
+    @RequestMapping(value = "/getProdutoByMarcaId", method = RequestMethod.GET)
+    public Optional<ProdutoDAO[]> getProdutoByMarcaId(@RequestParam("id") int id) {
+        //TODO: Verificar se tem que tratar
+        MarcaDAO marca = new MarcaDAO();
+        marca.setMARCA_ID(id);
+        return produtoRepository.findByMarca(marca);
+    }
+
+    @RequestMapping(value = "/getProdutoByCategoriaId", method = RequestMethod.GET)
+    public Optional<ProdutoDAO[]> getProdutoByCategoriaId(@RequestParam("id") int id) {
+        //TODO: Verificar se tem que tratar
+        return produtoRepository.findByCategoriaId(id);
+    }
     @RequestMapping(value = "/checkProduto", method = RequestMethod.GET)
     public String produtoExiste(@RequestParam("id") int id) {
         if (produtoRepository.existsById(id)) {
