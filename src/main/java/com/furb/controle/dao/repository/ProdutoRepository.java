@@ -1,5 +1,6 @@
 package com.furb.controle.dao.repository;
 
+import com.furb.controle.model.CategoriaDAO;
 import com.furb.controle.model.MarcaDAO;
 import com.furb.controle.model.ProdutoDAO;
 
@@ -11,8 +12,8 @@ public interface ProdutoRepository<T, S> {
 
       Optional<ProdutoDAO[]> findByMarca(MarcaDAO marca);
 
-      Optional<ProdutoDAO[]> findByCategoriaId(Integer id);
-      // TODO: REVER ISSO
+      Optional<ProdutoDAO[]> findByCategoria(CategoriaDAO produto);
+
 }
 
 //    ProdutoDAO findByCNPJ(String cnpj);
