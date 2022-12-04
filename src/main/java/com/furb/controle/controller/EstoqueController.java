@@ -189,12 +189,12 @@ public class EstoqueController {
         return categoriaRepository.findByNome(nome);
     }
 
-    @RequestMapping(value = "/getCategoriaByMarca", method = RequestMethod.GET)
+    @RequestMapping(value = "/getCategoriaByProdutoId", method = RequestMethod.GET)
     public Optional<CategoriaDAO[]> getCategoriaByMarca(@RequestParam("id") int id) {
         //TODO: Verificar se tem que tratar
-        MarcaDAO marca = new MarcaDAO();
-        marca.setMARCA_ID(id);
-        return categoriaRepository.findByMarca(marca);
+        ProdutoDAO produto = new ProdutoDAO();
+        produto.setId(id);
+        return categoriaRepository.findByProduto(produto);
     }
 
     @RequestMapping(value = "/checkCategoria", method = RequestMethod.GET)

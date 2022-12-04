@@ -2,17 +2,11 @@ package com.furb.controle.model;
 
 public class ProdutoDTO {
     private Integer id;
-
     private Integer marcaId;
-
     private Integer categoriaId;
     private String nome;
-    // TODO: IMPLEMENTAR PARA USAR NO CONTROLLER
-
     private Double preco;
-
     private String descricao;
-
     private Integer qtdEstoque;
 
     public Integer getId() {
