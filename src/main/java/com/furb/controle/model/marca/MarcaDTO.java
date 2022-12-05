@@ -1,4 +1,4 @@
-package com.furb.controle.model;
+package com.furb.controle.model.marca;
 
 public class MarcaDTO {
     private int MARCA_ID;

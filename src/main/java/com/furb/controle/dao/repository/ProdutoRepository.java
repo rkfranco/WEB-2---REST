@@ -1,8 +1,8 @@
 package com.furb.controle.dao.repository;
 
-import com.furb.controle.model.CategoriaDAO;
-import com.furb.controle.model.MarcaDAO;
-import com.furb.controle.model.ProdutoDAO;
+import com.furb.controle.model.categoria.CategoriaDAO;
+import com.furb.controle.model.marca.MarcaDAO;
+import com.furb.controle.model.produto.ProdutoDAO;
 
 import java.util.Optional;
 

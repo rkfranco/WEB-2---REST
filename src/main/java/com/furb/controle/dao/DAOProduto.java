@@ -1,7 +1,7 @@
 package com.furb.controle.dao;
 
 import com.furb.controle.dao.repository.ProdutoRepository;
-import com.furb.controle.model.ProdutoDAO;
+import com.furb.controle.model.produto.ProdutoDAO;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

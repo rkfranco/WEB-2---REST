@@ -1,6 +1,7 @@
-package com.furb.controle.model;
+package com.furb.controle.model.categoria;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.furb.controle.model.produto.ProdutoDAO;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -23,11 +24,11 @@ public class CategoriaDAO {
     @Column
     private String descricao;
 
-    public Integer getCATEGORIA_ID() {
+    public Integer getId() {
         return id;
     }
 
-    public void setCATEGORIA_ID(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 

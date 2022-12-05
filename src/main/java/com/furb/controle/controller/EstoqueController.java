@@ -3,10 +3,11 @@ package com.furb.controle.controller;
 import com.furb.controle.dao.DAOCategoria;
 import com.furb.controle.dao.DAOMarca;
 import com.furb.controle.dao.DAOProduto;
-import com.furb.controle.model.CategoriaDAO;
-import com.furb.controle.model.MarcaDAO;
-import com.furb.controle.model.ProdutoDAO;
-import com.furb.controle.model.ProdutoDTO;
+import com.furb.controle.error.ResourceNotFoundException;
+import com.furb.controle.model.categoria.CategoriaDAO;
+import com.furb.controle.model.marca.MarcaDAO;
+import com.furb.controle.model.produto.ProdutoDAO;
+import com.furb.controle.model.produto.ProdutoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,19 +34,27 @@ public class EstoqueController {
     }
 
     @RequestMapping(value = "/getMarcaById", method = RequestMethod.GET)
-    public Optional<MarcaDAO> getMarcaById(@RequestParam("id") Integer id) {
-        //TODO: Verificar se tem que tratar
-        return marcaRepository.findById(id);
+    public MarcaDAO getMarcaById(@RequestParam("id") Integer id) {
+        Optional<MarcaDAO> marca = marcaRepository.findById(id);
+        if (marca.isEmpty())
+            throw new ResourceNotFoundException("Nenhuma marca encontrada para o id: " + id);
+        return marca.get();
     }
 
     @RequestMapping(value = "/getMarcaByCNPJ", method = RequestMethod.GET)
-    public Optional<MarcaDAO> getMarcaByCNPJ(@RequestParam("cnpj") String cnpj) {
-        return marcaRepository.findBycnpj(cnpj);
+    public MarcaDAO getMarcaByCNPJ(@RequestParam("cnpj") String cnpj) {
+        Optional<MarcaDAO> marca = marcaRepository.findBycnpj(cnpj);
+        if (marca.isEmpty())
+            throw new ResourceNotFoundException("Nenhuma marca encontrada para o cnpj: " + cnpj);
+        return marca.get();
     }
 
     @RequestMapping(value = "/getMarcaByNome", method = RequestMethod.GET)
-    public Optional<MarcaDAO> getMarcaByNome(@RequestParam("nome") String nome) {
-        return marcaRepository.findBynome(nome);
+    public MarcaDAO getMarcaByNome(@RequestParam("nome") String nome) {
+        Optional<MarcaDAO> marca = marcaRepository.findBynome(nome);
+        if (marca.isEmpty())
+            throw new ResourceNotFoundException("Nenhuma marca encontrada com o nome: " + nome);
+        return marca.get();
     }
 
     @RequestMapping(value = "/checkMarca", method = RequestMethod.GET)
@@ -64,19 +73,24 @@ public class EstoqueController {
 
     @RequestMapping(value = "/updateMarca", method = RequestMethod.PUT)
     public Optional<MarcaDAO> updateMarca(@RequestBody MarcaDAO newMarca, @RequestParam("id") int id) {
-        return marcaRepository.findById(id).map(
-                marca -> {
+        Optional<MarcaDAO> marca = marcaRepository.findById(id);
+        if (marca.isEmpty())
+            throw new ResourceNotFoundException("Nenhuma marca encontrada para o id: " + id);
+        return marca.map(
+                marcaNova -> {
                     //marca.setMARCA_ID(newMarca.getMARCA_ID()); -> N pode alterar poís é o id
-                    marca.setCnpj(newMarca.getCnpj());
-                    marca.setRazaoSocial(newMarca.getRazaoSocial());
-                    marca.setNome(newMarca.getNome());
-                    return marcaRepository.save(marca);
+                    marcaNova.setCnpj(newMarca.getCnpj());
+                    marcaNova.setRazaoSocial(newMarca.getRazaoSocial());
+                    marcaNova.setNome(newMarca.getNome());
+                    return marcaRepository.save(marcaNova);
                 }
         );
     }
 
     @RequestMapping(value = "/deleteMarca", method = RequestMethod.DELETE)
     public String deleteMarca(@RequestParam("id") Integer id) {
+        if (marcaRepository.findById(id).isEmpty())
+            throw new ResourceNotFoundException("Nenhuma marca encontrada para o id:" + id);
         marcaRepository.deleteById(id);
         return "Marca deletada com sucesso!";
     }
@@ -89,31 +103,37 @@ public class EstoqueController {
     }
 
     @RequestMapping(value = "/getProdutoById", method = RequestMethod.GET)
-    public Optional<ProdutoDAO> getProdutoById(@RequestParam("id") int id) {
-        //TODO: Verificar se tem que tratar
-        return produtoRepository.findById(id);
+    public ProdutoDAO getProdutoById(@RequestParam("id") int id) {
+        Optional<ProdutoDAO> produto = produtoRepository.findById(id);
+        if (produto.isEmpty())
+            throw new ResourceNotFoundException("Nenhum produto encontrado para o id: " + id);
+        return produto.get();
     }
 
     @RequestMapping(value = "/getProdutoByNome", method = RequestMethod.GET)
-    public Optional<ProdutoDAO> getProdutoByNome(@RequestParam("nome") String nome) {
-        //TODO: Verificar se tem que tratar
-        return produtoRepository.findBynome(nome);
+    public ProdutoDAO getProdutoByNome(@RequestParam("nome") String nome) {
+        Optional<ProdutoDAO> produto = produtoRepository.findBynome(nome);
+        if (produto.isEmpty())
+            throw new ResourceNotFoundException("Nenhum produto encontrado com o nome: " + nome);
+        return produto.get();
     }
 
     @RequestMapping(value = "/getProdutoByMarcaId", method = RequestMethod.GET)
-    public Optional<ProdutoDAO[]> getProdutoByMarcaId(@RequestParam("id") int id) {
-        //TODO: Verificar se tem que tratar
-        MarcaDAO marca = new MarcaDAO();
-        marca.setMARCA_ID(id);
-        return produtoRepository.findByMarca(marca);
+    public ProdutoDAO[] getProdutoByMarcaId(@RequestParam("id") int id) {
+        MarcaDAO marca = this.getMarcaById(id);
+        Optional<ProdutoDAO[]> produtos = produtoRepository.findByMarca(marca);
+        if (produtos.isEmpty())
+            throw new ResourceNotFoundException("Nenhum produto vinculado a esta marca com id: " + id + " foi encontrado");
+        return produtos.get();
     }
 
     @RequestMapping(value = "/getProdutoByCategoriaId", method = RequestMethod.GET)
-    public Optional<ProdutoDAO[]> getProdutoByCategoriaId(@RequestParam("id") int id) {
-        //TODO: Verificar se tem que tratar
-        CategoriaDAO categoria = new CategoriaDAO();
-        categoria.setCATEGORIA_ID(id);
-        return produtoRepository.findByCategoria(categoria);
+    public ProdutoDAO[] getProdutoByCategoriaId(@RequestParam("id") int id) {
+        CategoriaDAO categoria = this.getCategoriaById(id);
+        Optional<ProdutoDAO[]> produtos = produtoRepository.findByCategoria(categoria);
+        if (produtos.isEmpty())
+            throw new ResourceNotFoundException("Nenhum produto encontrado vinculado a categoria com id: " + id);
+        return produtos.get();
     }
 
     @RequestMapping(value = "/checkProduto", method = RequestMethod.GET)
@@ -127,16 +147,18 @@ public class EstoqueController {
     @RequestMapping(value = "/addProduto", method = RequestMethod.POST)
     public String addProduto(@RequestBody ProdutoDTO newProduto) {
         ProdutoDAO produto = new ProdutoDAO();
+        Optional<MarcaDAO> marca = marcaRepository.findById(newProduto.getMarcaId());
+        Optional<CategoriaDAO> categoria = categoriaRepository.findById(newProduto.getCategoriaId());
+        if (marca.isEmpty()) {
+            throw new ResourceNotFoundException("Nenhuma marca encontrada para o id" + newProduto.getMarcaId());
+        }
+        if (categoria.isEmpty()) {
+            throw new ResourceNotFoundException("Nenhuma categoria encontrada para o id" + newProduto.getCategoriaId());
+        }
         produto.setId(newProduto.getId());
         produto.setNome(newProduto.getNome());
         produto.setDescricao(newProduto.getDescricao());
         produto.setPreco(newProduto.getPreco());
-        Optional<MarcaDAO> marca = marcaRepository.findById(newProduto.getMarcaId());
-        Optional<CategoriaDAO> categoria = categoriaRepository.findById(newProduto.getCategoriaId());
-        if (marca.isEmpty() || categoria.isEmpty()) {
-            throw new IllegalArgumentException();
-            //TODO: implementar erro para a marca
-        }
         produto.setMarca(marca.get());
         produto.setCategoria(categoria.get());
         produto.setQtdEstoque(newProduto.getQtdEstoque());
@@ -153,9 +175,11 @@ public class EstoqueController {
                     produto.setPreco(newProduto.getPreco());
                     Optional<MarcaDAO> marca = marcaRepository.findById(newProduto.getMarcaId());
                     Optional<CategoriaDAO> categoria = categoriaRepository.findById(newProduto.getCategoriaId());
-                    if (marca.isEmpty() || categoria.isEmpty()) {
-                        throw new IllegalArgumentException();
-                        //TODO: implementar erro para a marca
+                    if (marca.isEmpty()) {
+                        throw new ResourceNotFoundException("Nenhuma marca encontrada para o id" + newProduto.getMarcaId());
+                    }
+                    if (categoria.isEmpty()) {
+                        throw new ResourceNotFoundException("Nenhuma categoria encontrada para o id" + newProduto.getCategoriaId());
                     }
                     produto.setMarca(marca.get());
                     produto.setCategoria(categoria.get());
@@ -167,6 +191,8 @@ public class EstoqueController {
 
     @RequestMapping(value = "/deleteProdutoById", method = RequestMethod.DELETE)
     public String deleteProdutoById(@RequestParam("id") Integer id) {
+        if (produtoRepository.findById(id).isEmpty())
+            throw new ResourceNotFoundException("Nenhum produto encontrado para o id:" + id);
         produtoRepository.deleteById(id);
         return "Produto deletado com sucesso!";
     }
@@ -178,23 +204,29 @@ public class EstoqueController {
     }
 
     @RequestMapping(value = "/getCategoriaById", method = RequestMethod.GET)
-    public Optional<CategoriaDAO> getCategoriaById(@RequestParam("id") int id) {
-        //TODO: Verificar se tem que tratar
-        return categoriaRepository.findById(id);
+    public CategoriaDAO getCategoriaById(@RequestParam("id") int id) {
+        Optional<CategoriaDAO> categoria = categoriaRepository.findById(id);
+        if (categoria.isEmpty())
+            throw new ResourceNotFoundException("Nenhuma categoria encontrada para o id: " + id);
+        return categoria.get();
     }
 
     @RequestMapping(value = "/getCategoriaByNome", method = RequestMethod.GET)
-    public Optional<CategoriaDAO> getCategoriaByNome(@RequestParam("nome") String nome) {
-        //TODO: Verificar se tem que tratar
-        return categoriaRepository.findByNome(nome);
+    public CategoriaDAO getCategoriaByNome(@RequestParam("nome") String nome) {
+        Optional<CategoriaDAO> categoria = categoriaRepository.findByNome(nome);
+        if (categoria.isEmpty())
+            throw new ResourceNotFoundException("Nenhuma categoria encontrada com o nome: " + nome);
+        return categoria.get();
     }
 
     @RequestMapping(value = "/getCategoriaByProdutoId", method = RequestMethod.GET)
-    public Optional<CategoriaDAO[]> getCategoriaByMarca(@RequestParam("id") int id) {
-        //TODO: Verificar se tem que tratar
+    public CategoriaDAO getCategoriaByMarca(@RequestParam("id") int id) {
         ProdutoDAO produto = new ProdutoDAO();
         produto.setId(id);
-        return categoriaRepository.findByProduto(produto);
+        Optional<CategoriaDAO> categoria = categoriaRepository.findByProduto(produto);
+        if (categoria.isEmpty())
+            throw new ResourceNotFoundException("Nenhum produto encontrado para o id: " + id);
+        return categoria.get();
     }
 
     @RequestMapping(value = "/checkCategoria", method = RequestMethod.GET)
@@ -213,18 +245,22 @@ public class EstoqueController {
 
     @RequestMapping(value = "/updateCategoria", method = RequestMethod.PUT)
     public Optional<CategoriaDAO> updateCategoria(@RequestBody CategoriaDAO newCategoria, @RequestParam("id") Integer id) {
-        return categoriaRepository.findById(id).map(
-                categoria -> {
-                    categoria.setNome(newCategoria.getNome());
-                    categoria.setDescricao(newCategoria.getDescricao());
-                    return categoriaRepository.save(categoria);
-                    // TODO: Caso o id n exista o valor retornado é null e n faz nada
+        Optional<CategoriaDAO> categoria = categoriaRepository.findById(id);
+        if (categoria.isEmpty())
+            throw new ResourceNotFoundException("Nenhuma categoria encontrada para o id: " + id);
+        return categoria.map(
+                oldCategoria -> {
+                    oldCategoria.setNome(newCategoria.getNome());
+                    oldCategoria.setDescricao(newCategoria.getDescricao());
+                    return categoriaRepository.save(oldCategoria);
                 }
         );
     }
 
     @RequestMapping(value = "/deleteCategoria", method = RequestMethod.DELETE)
     public String deleteCategoria(@RequestParam("id") Integer id) {
+        if (categoriaRepository.findById(id).isEmpty())
+            throw new ResourceNotFoundException("Nenhuma categoria encontrada para o id:" + id);
         categoriaRepository.deleteById(id);
         return "Categoria deletada com sucesso!";
     }

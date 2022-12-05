@@ -1,7 +1,7 @@
 package com.furb.controle.dao;
 
 import com.furb.controle.dao.repository.CategoriaRepository;
-import com.furb.controle.model.CategoriaDAO;
+import com.furb.controle.model.categoria.CategoriaDAO;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,7 @@
-package com.furb.controle.model;
+package com.furb.controle.model.marca;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.furb.controle.model.produto.ProdutoDAO;
 
 import javax.persistence.*;
 import java.util.Set;

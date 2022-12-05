@@ -1,4 +1,4 @@
-package com.furb.controle.model;
+package com.furb.controle.model.produto;
 
 public class ProdutoDTO {
     private Integer id;

@@ -2,7 +2,7 @@ package com.furb.controle.dao;
 
 
 import com.furb.controle.dao.repository.MarcaRepository;
-import com.furb.controle.model.MarcaDAO;
+import com.furb.controle.model.marca.MarcaDAO;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

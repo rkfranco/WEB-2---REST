@@ -1,6 +1,8 @@
-package com.furb.controle.model;
+package com.furb.controle.model.produto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.furb.controle.model.categoria.CategoriaDAO;
+import com.furb.controle.model.marca.MarcaDAO;
+import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 
@@ -13,12 +15,12 @@ public class ProdutoDAO {
     private Integer id;
 
     @ManyToOne
-    //@JsonIgnore
+    @NotNull
     @JoinColumn(name = "produto_marca_id", nullable = false)
     private MarcaDAO marca;
 
     @ManyToOne
-    //@JsonIgnore
+    @NotNull
     @JoinColumn(name = "produto_categoria_id", nullable = false)
     private CategoriaDAO categoria;
     @Column

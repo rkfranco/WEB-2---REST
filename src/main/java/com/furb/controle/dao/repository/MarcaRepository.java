@@ -1,6 +1,6 @@
 package com.furb.controle.dao.repository;
 
-import com.furb.controle.model.MarcaDAO;
+import com.furb.controle.model.marca.MarcaDAO;
 
 import java.util.Optional;
 
