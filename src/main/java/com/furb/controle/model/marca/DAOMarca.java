@@ -1,14 +1,14 @@
 package com.furb.controle.model.marca;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.furb.controle.model.produto.ProdutoDAO;
+import com.furb.controle.model.produto.DAOProduto;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Table(name = "marca")
-public class MarcaDAO {
+public class DAOMarca {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +16,7 @@ public class MarcaDAO {
 
     @JsonIgnore
     @OneToMany(mappedBy = "marca")
-    private Set<ProdutoDAO> produto;
+    private Set<DAOProduto> produto;
 
     @Column
     private String razaoSocial;
@@ -27,11 +27,11 @@ public class MarcaDAO {
     @Column
     private String cnpj;
 
-    public Set<ProdutoDAO> getProduto() {
+    public Set<DAOProduto> getProduto() {
         return produto;
     }
 
-    public void setProduto(Set<ProdutoDAO> produto) {
+    public void setProduto(Set<DAOProduto> produto) {
         this.produto = produto;
     }
 

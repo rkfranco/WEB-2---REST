@@ -1,14 +1,14 @@
 package com.furb.controle.model.categoria;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.furb.controle.model.produto.ProdutoDAO;
+import com.furb.controle.model.produto.DAOProduto;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Table(name = "categoria")
-public class CategoriaDAO {
+public class DAOCategoria {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +16,7 @@ public class CategoriaDAO {
 
     @JsonIgnore
     @OneToMany(mappedBy = "categoria")
-    private Set<ProdutoDAO> produto;
+    private Set<DAOProduto> produto;
 
     @Column
     private String nome;

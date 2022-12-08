@@ -1,14 +1,14 @@
 package com.furb.controle.model.produto;
 
-import com.furb.controle.model.categoria.CategoriaDAO;
-import com.furb.controle.model.marca.MarcaDAO;
+import com.furb.controle.model.categoria.DAOCategoria;
+import com.furb.controle.model.marca.DAOMarca;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "produto")
-public class ProdutoDAO {
+public class DAOProduto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,12 +17,12 @@ public class ProdutoDAO {
     @ManyToOne
     @NotNull
     @JoinColumn(name = "produto_marca_id", nullable = false)
-    private MarcaDAO marca;
+    private DAOMarca marca;
 
     @ManyToOne
     @NotNull
     @JoinColumn(name = "produto_categoria_id", nullable = false)
-    private CategoriaDAO categoria;
+    private DAOCategoria categoria;
     @Column
     private String nome;
 
@@ -35,19 +35,19 @@ public class ProdutoDAO {
     @Column
     private Integer qtdEstoque;
 
-    public CategoriaDAO getCategoria() {
+    public DAOCategoria getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(CategoriaDAO categoria) {
+    public void setCategoria(DAOCategoria categoria) {
         this.categoria = categoria;
     }
 
-    public MarcaDAO getMarca() {
+    public DAOMarca getMarca() {
         return marca;
     }
 
-    public void setMarca(MarcaDAO marca) {
+    public void setMarca(DAOMarca marca) {
         this.marca = marca;
     }
 
