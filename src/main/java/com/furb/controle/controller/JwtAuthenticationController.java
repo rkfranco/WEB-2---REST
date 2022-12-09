@@ -1,7 +1,7 @@
 package com.furb.controle.controller;
 
 import com.furb.controle.config.JwtTokenUtil;
-import com.furb.controle.config.JwtUserDetailsService;
+import com.furb.controle.service.JwtUserDetailsService;
 import com.furb.controle.model.JwtRequest;
 import com.furb.controle.model.JwtResponse;
 import com.furb.controle.model.user.UserDTO;

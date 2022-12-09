@@ -1,4 +1,4 @@
-package com.furb.controle.config;
+package com.furb.controle.service;
 
 import com.furb.controle.dao.UserDAO;
 import com.furb.controle.model.user.DAOUser;
