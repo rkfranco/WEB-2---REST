@@ -1,10 +1,11 @@
 package com.furb.controle.controller;
 
 import com.furb.controle.config.JwtTokenUtil;
-import com.furb.controle.service.JwtUserDetailsService;
 import com.furb.controle.model.JwtRequest;
 import com.furb.controle.model.JwtResponse;
 import com.furb.controle.model.user.UserDTO;
+import com.furb.controle.service.JwtUserDetailsService;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +14,9 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import com.furb.controle.error.UsernameAlreadyRegisteredException;
+
+import java.sql.SQLIntegrityConstraintViolationException;
 
 @RestController
 @CrossOrigin
@@ -42,7 +46,11 @@ public class JwtAuthenticationController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<?> saveUser(@RequestBody UserDTO user) throws Exception {
-        return ResponseEntity.ok(userDetailsService.save(user));
+        try {
+            return ResponseEntity.ok(userDetailsService.save(user));
+        } catch (Exception ex) {
+            throw new UsernameAlreadyRegisteredException("Nome de usuario: " + user.getUsername() + " já cadastrado");
+        }
     }
 
     private void authenticate(String username, String password) throws Exception {
