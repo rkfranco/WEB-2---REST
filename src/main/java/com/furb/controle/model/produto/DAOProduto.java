@@ -1,5 +1,7 @@
 package com.furb.controle.model.produto;
 
+import com.furb.controle.dao.CategoriaDAO;
+import com.furb.controle.dao.MarcaDAO;
 import com.furb.controle.model.categoria.DAOCategoria;
 import com.furb.controle.model.marca.DAOMarca;
 import com.sun.istack.NotNull;
@@ -89,5 +91,15 @@ public class DAOProduto {
 
     public void setQtdEstoque(int qtdEstoque) {
         this.qtdEstoque = qtdEstoque;
+    }
+
+    public void toMap(ProdutoDTO produto, DAOMarca marca, DAOCategoria categoria){
+        this.setId(produto.getId());
+        this.setNome(produto.getNome());
+        this.setDescricao(produto.getDescricao());
+        this.setPreco(produto.getPreco());
+        this.setMarca(marca);
+        this.setCategoria(categoria);
+        this.setQtdEstoque(produto.getQtdEstoque());
     }
 }
